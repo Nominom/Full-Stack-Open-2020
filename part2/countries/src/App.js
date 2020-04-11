@@ -24,11 +24,14 @@ const CountryFilter = ({ value, onChange }) => {
 	)
 }
 
-const CountryList = ({ countries }) => {
+const CountryList = ({ countries, setCountry }) => {
 	return (
 		<div>
 			{countries.map(country =>
-				<div key={country.alpha3Code}>{country.name}</div>
+				<div key={country.alpha3Code}>
+					{country.name} &nbsp;
+					<button value={country.name} onClick={setCountry}>show</button>
+					</div>
 			)}
 		</div>
 	)
@@ -57,6 +60,10 @@ const App = () => {
 			country.name.toLowerCase().includes(filter))
 	}
 
+	const setCountry = (event) => {
+		setNewFilter(event.target.value)
+	}
+
 	const filtered = filterCountries()
 
 	if (filtered.length === 1) {
@@ -66,18 +73,18 @@ const App = () => {
 				<SingleCountryView country={filtered[0]} />
 			</div>
 		)
-	} else if (filtered.length > 10) {
+	} else if (filtered.length <= 10 || filterString === '') {
+		return (
+			<div>
+				<CountryFilter value={filterString} onChange={onFilterChange} />
+				<CountryList countries={filtered} setCountry={setCountry}/>
+			</div>
+		)
+	}else {
 		return (
 			<div>
 				<CountryFilter value={filterString} onChange={onFilterChange} />
 				<div>Too many matches, specify another filter</div>
-			</div>
-		)
-	} else {
-		return (
-			<div>
-				<CountryFilter value={filterString} onChange={onFilterChange} />
-				<CountryList countries={filtered} />
 			</div>
 		)
 	}
