@@ -1,10 +1,11 @@
-
-
 ## Create new react project
 npx create-react-app nameofapp
 
 ## Start app
 npm start
+
+## Start app with environment variable (Powershell)
+($env:REACT_APP_API_KEY = "abcdef") -and (npm start)
 
 ## Start json server
 npx json-server --port 3001 --watch db.json

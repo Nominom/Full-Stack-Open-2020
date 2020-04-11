@@ -1,6 +1,47 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
+
+const Weather = ({ country }) => {
+	const [weather, setWeather] = useState(null)
+	const api_key = process.env.REACT_APP_API_KEY
+	const url = `http://api.weatherstack.com/current?access_key=${api_key}&query=${country.capital}`
+
+	useEffect(() => {
+		axios.get(url).then(response => {
+			setWeather(response.data)
+		})
+	}, [url])
+
+	if (weather === null) {
+		return (
+			<div>
+				<h2>Weather</h2>
+				<div>Loading weather data...</div>
+			</div>
+		)
+	} else if (weather.success === false) {
+		return (
+			<div>
+				<h2>Weather</h2>
+				<div>No weather data available</div>
+			</div>
+		)
+	} else {
+		return (
+			<div>
+				<h2>Weather in {country.capital}</h2>
+				<p><b>temperature: </b> {weather.current.temperature} Celcius</p>
+				<img src={weather.current.weather_icons[0]} alt={weather.current.weather_descriptions[0]} />
+				<p><b>wind:</b> {weather.current.wind_speed} km/h {weather.current.wind_dir}</p>
+			</div>
+		)
+	}
+
+}
+
+
+
 const SingleCountryView = ({ country }) => {
 	return (
 		<div>
@@ -12,6 +53,7 @@ const SingleCountryView = ({ country }) => {
 				{country.languages.map(lang => <li key={lang.iso639_2}>{lang.name}</li>)}
 			</ul>
 			<img src={country.flag} height={100} alt='flag' />
+			<Weather country={country} />
 		</div>
 	)
 }
@@ -31,12 +73,11 @@ const CountryList = ({ countries, setCountry }) => {
 				<div key={country.alpha3Code}>
 					{country.name} &nbsp;
 					<button value={country.name} onClick={setCountry}>show</button>
-					</div>
+				</div>
 			)}
 		</div>
 	)
 }
-
 
 const App = () => {
 	const [countries, setCountries] = useState([])
@@ -77,10 +118,10 @@ const App = () => {
 		return (
 			<div>
 				<CountryFilter value={filterString} onChange={onFilterChange} />
-				<CountryList countries={filtered} setCountry={setCountry}/>
+				<CountryList countries={filtered} setCountry={setCountry} />
 			</div>
 		)
-	}else {
+	} else {
 		return (
 			<div>
 				<CountryFilter value={filterString} onChange={onFilterChange} />
