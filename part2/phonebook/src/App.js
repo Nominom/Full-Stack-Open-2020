@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
@@ -27,9 +26,8 @@ const App = () => {
 			p.number.toLowerCase().includes(lowerFilter))
 	}
 
-	const personExists = (name, number) => {
+	const personExists = (name) => {
 		return persons.some(x => x.name === name)
-			|| persons.some(x => x.number === number)
 	}
 
 	const addPerson = (event) => {
@@ -42,7 +40,17 @@ const App = () => {
 			setNewName('')
 			setNewNumber('')
 		} else {
-			alert(`${newName} or ${newNumber} is already added to phonebook!`)
+			if (window.confirm(`${newName} is already added to phonebook. Replace old number with new one?`)) {
+				const id = persons.find(p => p.name === newName).id
+				const newPerson = { name: newName, number: newNumber }
+				personService.update(id, newPerson).then(
+					data => setPersons(
+						persons.map(
+							p => p.id === id ? data : p
+						)
+					)
+				)
+			}
 		}
 	}
 
@@ -59,12 +67,12 @@ const App = () => {
 	}
 
 	const deletePerson = (person) => {
-		if(window.confirm(`Delete ${person.name}?`)){
+		if (window.confirm(`Delete ${person.name}?`)) {
 			personService.remove(person.id)
-			.then(data => {
-				console.log(person, ' deleted')
-				setPersons(persons.filter(p => p.id !== person.id))
-			})
+				.then(data => {
+					console.log(person, ' deleted')
+					setPersons(persons.filter(p => p.id !== person.id))
+				})
 		}
 	}
 
