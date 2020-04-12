@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 import personService from './services/persons'
 
 const App = () => {
@@ -9,12 +10,26 @@ const App = () => {
 	const [newName, setNewName] = useState('')
 	const [newNumber, setNewNumber] = useState('')
 	const [filterString, setNewFilter] = useState('')
+	const [notificationMessage, setNotificationMessage] = useState(null)
+	const [notificationClass, setNotificationClass] = useState('error')
 
 	useEffect(() => {
 		personService.getAll().then(
 			data => setPersons(data)
 		)
 	}, [])
+
+	const showNotification = (message, error) => {
+		if(error){
+			setNotificationClass('error')
+		}else{
+			setNotificationClass('success')
+		}
+		setNotificationMessage(message)
+		setTimeout(() => {
+			setNotificationMessage(null)
+		  }, 5000)
+	}
 
 	const filterPersons = () => {
 		if (filterString === '')
@@ -36,6 +51,7 @@ const App = () => {
 			const newPerson = { name: newName, number: newNumber }
 			personService.create(newPerson).then(data => {
 				setPersons(persons.concat(data))
+				showNotification(`${data.name} was added!`, false)
 			})
 			setNewName('')
 			setNewNumber('')
@@ -43,12 +59,14 @@ const App = () => {
 			if (window.confirm(`${newName} is already added to phonebook. Replace old number with new one?`)) {
 				const id = persons.find(p => p.name === newName).id
 				const newPerson = { name: newName, number: newNumber }
-				personService.update(id, newPerson).then(
-					data => setPersons(
+				personService.update(id, newPerson).then(data => {
+					 setPersons(
 						persons.map(
 							p => p.id === id ? data : p
 						)
 					)
+					showNotification(`${data.name} was updated!`, false)
+				}
 				)
 			}
 		}
@@ -72,14 +90,15 @@ const App = () => {
 				.then(data => {
 					console.log(person, ' deleted')
 					setPersons(persons.filter(p => p.id !== person.id))
+					showNotification(`${person.name} was deleted!`, false)
 				})
 		}
 	}
 
-
 	return (
 		<div>
 			<h2>Phonebook</h2>
+			<Notification message={notificationMessage} cssClass={notificationClass} />
 			<Filter value={filterString} onChange={handleFilterChange} />
 			<h2>Add new contact</h2>
 			<PersonForm onSubmit={addPerson} newName={newName}
