@@ -67,7 +67,10 @@ const App = () => {
 					)
 					showNotification(`${data.name} was updated!`, false)
 				}
-				)
+				).catch(error => {
+					showNotification(`${newName} does not exist in the server anymore.`, true)
+					setPersons(persons.filter(p => p.name !== newName))
+				})
 			}
 		}
 	}
@@ -91,6 +94,9 @@ const App = () => {
 					console.log(person, ' deleted')
 					setPersons(persons.filter(p => p.id !== person.id))
 					showNotification(`${person.name} was deleted!`, false)
+				}).catch(error => {
+					showNotification(`${person.name} does not exist in the server anymore.`, true)
+					setPersons(persons.filter(p => p.id !== person.id))
 				})
 		}
 	}
