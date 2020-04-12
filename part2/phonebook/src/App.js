@@ -35,7 +35,10 @@ const App = () => {
 		event.preventDefault()
 		if (!personExists(newName, newNumber)) {
 			const newPerson = { name: newName, number: newNumber }
-			setPersons(persons.concat(newPerson))
+			axios.post('http://localhost:3001/persons', newPerson)
+			.then(response => {
+				setPersons(persons.concat(response.data))
+			})
 			setNewName('')
 			setNewNumber('')
 		} else {
