@@ -22,3 +22,19 @@ npm install -g packagename
 ## Copying project (if doesn't work after)
 remove node_modules directory
 npm install
+
+## Login to heroku
+heroku login
+
+## Create heroku app
+heroku create
+
+## Update heroku app
+git push heroku master
+
+## Open heroku app
+heroku open
+
+## Set heroku configs
+heroku config:set MONGODB_URI="mongodb+srv://fullstack:<password>@example.net/database?retryWrites=true"
+
