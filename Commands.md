@@ -38,3 +38,26 @@ heroku open
 ## Set heroku configs
 heroku config:set MONGODB_URI="mongodb+srv://fullstack:<password>@example.net/database?retryWrites=true"
 
+## ESLint setup
+npm install eslint --save-dev
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+node_modules/.bin/eslint --init
+
+
+Add lint to package json scripts:
+```
+{
+  // ...
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    // ...
+    "lint": "eslint .",
+	"lintfix": "eslint --fix .",
+  },
+  // ...
+}
+```
+
+### Ignore build folder in ESLint
+ECHO 'build/*' | Out-File -Encoding "UTF8" .eslintignore
