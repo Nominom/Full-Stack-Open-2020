@@ -1,0 +1,23 @@
+GET http://localhost:3003/api/blogs/
+###
+GET http://localhost:3003/api/blogs/5ea821c26bd5b215c84d5f83
+###
+POST http://localhost:3003/api/blogs/
+content-type: application/json
+
+{
+    "title": "Developer blog",
+	"author": "Masa Mehiläinen",
+	"url": "localhost:80",
+	"likes": 100
+}
+###
+POST http://localhost:3003/api/blogs/
+content-type: application/json
+
+{
+    "title": "Other blog",
+	"author": "Maisa Cat",
+	"url": "localhost:81",
+	"likes": 999
+}
