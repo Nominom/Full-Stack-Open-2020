@@ -10,10 +10,10 @@ const app = express();
 
 const mongoUrl = config.MONGODB_URI;
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-	.then(() => { logger.info('connected to MongoDB'); })
-	.catch((error) => {
-		logger.error('Error connecting to MongoDB: ', error.message);
-	});
+  .then(() => { logger.info('connected to MongoDB'); })
+  .catch((error) => {
+    logger.error('Error connecting to MongoDB: ', error.message);
+  });
 
 app.use(cors());
 app.use(express.json());
