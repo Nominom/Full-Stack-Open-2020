@@ -21,3 +21,14 @@ content-type: application/json
 	"url": "localhost:81",
 	"likes": 999
 }
+###
+POST http://localhost:3003/api/users/
+content-type: application/json
+
+{
+    "username": "admin",
+	"password": "pasu",
+	"name": "Admin Admington"
+}
+###
+GET http://localhost:3003/api/users/
