@@ -11,7 +11,7 @@ const loginRouter = require('./controllers/login');
 const app = express();
 
 const mongoUrl = config.MONGODB_URI;
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
   .then(() => { logger.info('connected to MongoDB'); })
   .catch((error) => {
     logger.error('Error connecting to MongoDB: ', error.message);
