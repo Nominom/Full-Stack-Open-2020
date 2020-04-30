@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const config = require('./utils/config');
 const logger = require('./utils/logger');
 const blogsRouter = require('./controllers/blogs');
-const usersRouter = require('./controllers/users')
+const usersRouter = require('./controllers/users');
 
 const app = express();
 
